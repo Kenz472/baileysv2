@@ -1,8 +1,7 @@
 {
   "name": "@waguri/baileys",
   "version": "9.2.2",
-  "description": "Baileys:WhatsAppWebAPIを簡単に!🤖 WebSocketでWhatsAppWebAPIと対話
-.",
+  "description": "Baileys:WhatsAppWebAPIを簡単に!🤖 WebSocketでWhatsAppWebAPI.",
   "keywords": [
     "baileys",
     "whatsapp",
