@@ -1,4 +1,3 @@
-
 import { proto } from '../../WAProto';
 
 declare namespace Waguri {
@@ -157,6 +156,44 @@ declare namespace Waguri {
         document?: string | Buffer | { url: string };
         [key: string]: any;
     }
+    
+    interface StatusMentionMessage {
+        image?: string | Buffer | { url: string };
+        video?: string | Buffer | { url: string };
+        mentions: string;
+    }
+    
+    interface OrderMessage {
+        thumbnail?: string | Buffer;
+        itemCount?: number;
+        message?: string;
+        orderTitle?: string;
+        totalAmount1000?: number;
+        totalCurrencyCode?: string;
+    }
+    
+    interface CarouselCard {
+        productTitle?: string;
+        headerTitle?: string;
+        headerSubtitle?: string;
+        imageUrl?: string;
+        productId?: string;
+        productDescription?: string;
+        currencyCode?: string;
+        priceAmount1000?: string;
+        retailerId?: string;
+        url?: string;
+        businessOwnerJid?: string;
+        bodyText?: string;
+        footerText?: string;
+        buttons?: proto.Message.InteractiveMessage.INativeFlowButton[];
+    }
+    
+    interface CarouselMessage {
+        caption?: string;
+        footer?: string;
+        cards: CarouselCard[];
+    }
  
     interface MessageContent {
         requestPaymentMessage?: PaymentMessage;
@@ -165,6 +202,10 @@ declare namespace Waguri {
         albumMessage?: AlbumItem[];
         eventMessage?: EventMessage;
         pollResultMessage?: PollResultMessage;
+        statusMentionMessage?: StatusMentionMessage;
+        orderMessage?: OrderMessage;
+        carouselMessage?: CarouselMessage;
+        carousel?: CarouselMessage;
         groupStatusMessage?: GroupStatusMessage;
         sender?: string;
     }
@@ -197,7 +238,7 @@ declare class Waguri {
         relayMessageFn?: (jid: string, content: any, options?: any) => Promise<any>
     );
     
-    detectType(content: Waguri.MessageContent): 'PAYMENT' | 'PRODUCT' | 'INTERACTIVE' | 'ALBUM' | 'EVENT' | 'POLL_RESULT' | 'GROUP_STORY' | null;
+    detectType(content: Waguri.MessageContent): 'PAYMENT' | 'PRODUCT' | 'INTERACTIVE' | 'ALBUM' | 'EVENT' | 'POLL_RESULT' | 'STATUS_MENTION' | 'ORDER' | 'GROUP_STORY' | 'CAROUSEL' | null;
 
     handlePayment(
         content: { requestPaymentMessage: Waguri.PaymentMessage },
@@ -230,6 +271,24 @@ declare class Waguri {
     
     handlePollResult(
         content: { pollResultMessage: Waguri.PollResultMessage },
+        jid: string,
+        quoted?: proto.IWebMessageInfo
+    ): Promise<any>;
+    
+    handleStMention(
+        content: { statusMentionMessage: Waguri.StatusMentionMessage },
+        jid: string,
+        quoted?: proto.IWebMessageInfo
+    ): Promise<any>;
+    
+    handleOrderMessage(
+        content: { orderMessage: Waguri.OrderMessage },
+        jid: string,
+        quoted?: proto.IWebMessageInfo
+    ): Promise<any>;
+    
+    handleCarousel(
+        content: { carouselMessage: Waguri.CarouselMessage } | { carousel: Waguri.CarouselMessage },
         jid: string,
         quoted?: proto.IWebMessageInfo
     ): Promise<any>;
